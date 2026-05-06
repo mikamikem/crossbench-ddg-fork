@@ -40,3 +40,4 @@ class ActionType(ConfigEnum):
   MEET_SCRIPT = ("meet_script", "Run a script to automate Meet bot actions")
   MEMINFO = ("meminfo", "Dump current memory stats from the device.")
   PROBE = ("probe", "Invoke an action in the specified probe.")
+  SET_KEYBOARD_FOCUS_ON_ADDRESSBAR = ("set_keyboard_focus_on_addressbar", "Sets the keyboard focus to the address bar.")

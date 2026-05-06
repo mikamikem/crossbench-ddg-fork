@@ -13,6 +13,7 @@ class BrowserAttributes(enum.IntFlag):
   CHROMIUM = enum.auto()
   CHROME = enum.auto()
   EDGE = enum.auto()
+  DDG = enum.auto()
 
   CHROMIUM_BASED = enum.auto()
 
@@ -51,6 +52,10 @@ class BrowserAttributes(enum.IntFlag):
   @property
   def is_firefox(self) -> bool:
     return bool(self & self.FIREFOX)
+
+  @property
+  def is_ddg(self) -> bool:
+    return bool(self & self.DDG)
 
   @property
   def is_remote(self) -> bool:

@@ -50,9 +50,11 @@ class TextInputAction(InputSourceAction):
                text: Optional[str] = None,
                keyevent: Optional[str] = None,
                timeout: dt.timedelta = ACTION_TIMEOUT,
-               index: int = 0) -> None:
+               index: int = 0,
+               mark_event: bool = False) -> None:
     self._text: str | None = text
     self._keyevent: str | None = keyevent
+    self._mark_event: bool = mark_event
     super().__init__(source, duration, timeout, index)
 
   @property
@@ -62,6 +64,10 @@ class TextInputAction(InputSourceAction):
   @property
   def keyevent(self) -> Optional[str]:
     return self._keyevent
+
+  @property
+  def mark_event(self) -> Optional[bool]:
+    return self._mark_event
 
   @override
   def run_with(self, run: Run, action_runner: ActionRunner) -> None:

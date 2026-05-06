@@ -18,6 +18,9 @@
                       enabled_categories: "scheduler"
                       enabled_categories: "sequence_manager"
                       enabled_categories: "disabled-by-default-toplevel.flow"
+                      enabled_categories: "loading"
+                      enabled_categories: "navigation"
+                      enabled_categories: "blink.user_timing"
                       enabled_categories: "__metadata"
                       timestamp_unit_multiplier: 1000
                       filter_debug_annotations: false
@@ -32,6 +35,52 @@
               }
           }
         '''
+    }
+    "trace_processor": {
+      // If necessary, a custom path for trace_processor_shell can be passed
+      // trace_processor_bin: "/optional/path/to/trace_processor_shell"
+      "queries": [
+        // Queries can be specified as a reference to a file in
+        // crossbench/probes/trace_processor/queries:
+        // "firstcontentfulpaint"
+        // Or specified inline:
+        // {
+          // "name": "my_query"
+          // "sql": "select dur from slice where slice.name = 'my_slice'"
+        // }
+      ]
+      // "metrics": [
+        // "fcp"
+      // ]
+      // Additional directories containing trace processor modules
+      // can be specified:
+      // "module_paths": [
+        // "/my_project/modules/ext"
+      // ]
+      // Perfetto v2 metric definitions can be specified either inline
+      // or as a path:
+      "metric_definitions": [
+        // "./metric_def.textproto"
+
+        '''
+        metric_spec: {
+          id: "fcp"
+          value: "dur"
+          query {
+            table {
+              table_name: "fcp"
+            }
+            referenced_modules: "ext.navstarttofirstcontentfulpaint"
+          }
+        }
+        '''
+      ]
+      // Metrics to include only in the trace summary can be specified.
+      // summary_metrics will include everything in the 'metrics' list as well
+      // as additional metrics (such as v2 metrics) specified here:
+      "summary_metrics": [
+        "fcp"
+      ]
     }
   }
 }

@@ -1,12 +1,10 @@
 metric_spec: {
-  id: "file_metric_def_textproto"
-  value: "metric_column"
+  id: "fcp"
+  value: "dur"
   query {
-    id: "query_id"
     table {
-      table_name: "metric_table"
-      module_name: "module_name"
-      column_names: "metric_column"
+      table_name: "fcp"
     }
+    referenced_modules: "ext.navstarttofirstcontentfulpaint"
   }
 }

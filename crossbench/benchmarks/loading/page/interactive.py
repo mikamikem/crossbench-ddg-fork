@@ -14,6 +14,8 @@ from typing_extensions import override
 from crossbench.action_runner.action.action_type import ActionType
 from crossbench.action_runner.action.dump_html import DumpHtmlAction
 from crossbench.action_runner.action.get import GetAction
+from crossbench.action_runner.action.set_keyboard_focus_on_addressbar import SetKeyboardFocusOnAddressbarAction
+from crossbench.action_runner.action.text_input import TextInputAction
 from crossbench.benchmarks.loading.page.base import Page
 from crossbench.benchmarks.loading.playback_controller import \
     PlaybackController
@@ -84,10 +86,17 @@ class InteractivePage(Page):
   @property
   @override
   def first_url(self) -> str:
+    counter = 0
+
     for block in self.blocks:
       for action in block:
-        if action.TYPE == ActionType.GET:
-          return cast(GetAction, action).url
+          if action.TYPE == ActionType.GET:
+            return cast(GetAction, action).url
+          elif action.TYPE == ActionType.TEXT_INPUT:
+            if counter == 3:
+                return cast(TextInputAction, action).text
+            else:
+                counter += 1
     raise RuntimeError("No GET action with an URL found.")
 
   def create_failure_artifacts(self,

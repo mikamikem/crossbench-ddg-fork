@@ -37,7 +37,7 @@ SUPPORTED_EMBEDDER: Final = tuple(EMBEDDER_SHORT_NAME_TO_PACKAGE)
 
 SUPPORTED_BROWSER: Final = (
     "chrome", "chromium", "d8", "edge", "firefox", "safari",
-    "webkit") + CHROME_APK_HELPER_NAMES + SUPPORTED_EMBEDDER
+    "webkit", "duckduckgo") + CHROME_APK_HELPER_NAMES + SUPPORTED_EMBEDDER
 
 # Split inputs like:
 # - "/out/x64.release/chrome"
@@ -306,6 +306,14 @@ class BrowserConfig(ConfigObject):
       if driver_type == BrowserDriverType.ANDROID:
         return pth.AnyPosixPath("org.chromium.chrome")
       return all_browsers.Chromium.default_path(platform)
+    if identifier in ("ddg", "ddg-stable"):
+      return all_browsers.DDG.stable_path(platform)
+    if identifier == "ddg-beta":
+      return all_browsers.DDG.beta_path(platform)
+    if identifier == "ddg-dev":
+      return all_browsers.DDG.dev_path(platform)
+    if identifier == "ddg-canary":
+      return all_browsers.DDG.canary_path(platform)
     if identifier in ("edge", "edge-stable"):
       return all_browsers.Edge.stable_path(platform)
     if identifier == "edge-beta":

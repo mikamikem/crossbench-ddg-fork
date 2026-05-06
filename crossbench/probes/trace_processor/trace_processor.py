@@ -245,7 +245,7 @@ class TraceProcessorProbe(Probe):
 
     for module_path in self.module_paths:
       extra_flags.append("--add-sql-package")
-      extra_flags.append(str(module_path))
+      extra_flags.append(str(module_path).replace('\\', '/'))
 
     return TraceProcessorConfig(
         bin_path=self.trace_processor_bin,

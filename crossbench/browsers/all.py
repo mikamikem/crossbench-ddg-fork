@@ -17,6 +17,8 @@ from crossbench.browsers.chromium.webdriver import ChromiumBasedWebDriver, \
     LocalChromiumWebDriverAndroid
 from crossbench.browsers.chromium_based.chromium_based import ChromiumBased
 from crossbench.browsers.d8.d8 import D8
+from crossbench.browsers.ddg.ddg import DDG
+from crossbench.browsers.ddg.webdriver import DDGWebDriver
 from crossbench.browsers.edge.edge import Edge
 from crossbench.browsers.edge.webdriver import EdgeWebDriver
 from crossbench.browsers.firefox.firefox import Firefox
@@ -45,6 +47,8 @@ __all__ = [
     "ChromiumWebDriverChromeOsSsh",
     "ChromiumWebDriverSsh",
     "D8",
+    "DDG",
+    "DDGWebDriver",
     "Edge",
     "EdgeWebDriver",
     "Firefox",

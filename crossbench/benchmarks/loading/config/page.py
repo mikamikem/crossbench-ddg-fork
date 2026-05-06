@@ -15,6 +15,7 @@ from typing_extensions import override
 from crossbench import path as pth
 from crossbench.action_runner.action.action_type import ActionType
 from crossbench.action_runner.action.get import GetAction
+from crossbench.action_runner.action.text_input import TextInputAction
 from crossbench.benchmarks.loading.config.blocks import ActionBlock, \
     ActionBlockListConfig
 from crossbench.benchmarks.loading.config.login.custom import LoginBlock
@@ -144,5 +145,7 @@ class PageConfig(ConfigObject):
     for action in self.actions():
       if action.TYPE == ActionType.GET:
         return cast(GetAction, action).url
+      elif action.TYPE == ActionType.TEXT_INPUT:
+        return cast(TextInputAction, action).text
     logging.debug("PageConfig: No GET action with an URL found.")
     return ""

@@ -231,6 +231,8 @@ class BaseBrowserVariantsConfig(abc.ABC):
       return all_browsers.EdgeWebDriver
     if "d8" in path_str:
       return all_browsers.D8
+    if "duckduckgo" in path_str:
+      return all_browsers.DDGWebDriver
     raise argparse.ArgumentTypeError(f"Unsupported browser path='{path}'")
 
   @classmethod

@@ -17,8 +17,12 @@ from crossbench.action_runner.action.action import Action
 from crossbench.action_runner.action.action_type import ActionType
 from crossbench.action_runner.action.all import ACTIONS_TUPLE
 from crossbench.action_runner.action.get import GetAction
+from crossbench.action_runner.action.set_keyboard_focus_on_addressbar import SetKeyboardFocusOnAddressbarAction
+from crossbench.action_runner.action.text_input import TextInputAction
+from crossbench.action_runner.action.wait import WaitAction
 from crossbench.action_runner.action.wait_for_ready_state import \
     WaitForReadyStateAction
+from crossbench.benchmarks.loading.input_source import InputSource
 from crossbench.config import ConfigError, ConfigObject, ConfigParser
 from crossbench.parse import NumberParser, ObjectParser
 
@@ -92,7 +96,21 @@ class ActionBlock(ConfigObject):
 
   @classmethod
   def from_url(cls, url: str, duration: dt.timedelta) -> ActionBlock:
-    actions: tuple[Action, ...] = (GetAction(url, duration),)
+    lastDuration = duration - dt.timedelta(seconds=2)
+
+    actions: tuple[Action, ...] = (
+        SetKeyboardFocusOnAddressbarAction(url, dt.timedelta(seconds=1)),
+        # TextInputAction(InputSource.KEYBOARD, dt.timedelta(seconds=1), "{d}"),
+        TextInputAction(InputSource.KEYBOARD, dt.timedelta(seconds=1), "http://example.com"),
+        TextInputAction(InputSource.KEYBOARD, lastDuration, "\\e"),
+        WaitAction(duration=dt.timedelta(seconds=5)),
+        SetKeyboardFocusOnAddressbarAction(url, dt.timedelta(seconds=1)),
+        TextInputAction(InputSource.KEYBOARD, dt.timedelta(seconds=1), url),
+        TextInputAction(InputSource.KEYBOARD, lastDuration, "\\e", mark_event=True),
+        # WaitAction(duration=dt.timedelta(seconds=10)),
+        # TextInputAction(InputSource.KEYBOARD, dt.timedelta(seconds=1), "{\4}"),
+        WaitForReadyStateAction()
+    )
     if not duration:
       actions += (WaitForReadyStateAction(),)
     return ActionBlock(actions=actions)
@@ -142,9 +160,16 @@ class ActionBlock(ConfigObject):
 
   @property
   def first_url(self) -> str:
+    counter = 0
+
     for action in self.actions:
       if action.TYPE == ActionType.GET:
         return cast(GetAction, action).url
+      elif action.TYPE == ActionType.TEXT_INPUT:
+        if counter == 3:
+            return cast(TextInputAction, action).text
+        else:
+            counter += 1
     raise RuntimeError("No GET action with an URL found.")
 
 

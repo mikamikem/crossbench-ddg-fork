@@ -18,6 +18,7 @@ from crossbench.action_runner.default_bond_action_runner import \
     DefaultBondActionRunner
 from crossbench.action_runner.element_not_found_error import \
     ElementNotFoundError
+from crossbench.action_runner.keyboard import TypeString
 from crossbench.browsers.chromium.devtools import \
     DevToolsInBrowserClient as DevToolsClient
 from crossbench.probes.screenshot import ScreenshotProbe, \
@@ -224,6 +225,21 @@ class DefaultActionRunner(ActionRunner):
             "document.activeElement.value = arguments[0]", arguments=[text])
       else:
         raise InputSourceNotImplementedError(self, action, action.input_source)
+
+  def text_input_keyboard(self, run: Run,
+                          action: i_action.TextInputAction) -> None:
+      with run.actions("TextInput", measure=False) as actions:
+          if text := action.text:
+              TypeString(text, True)
+
+              if action.mark_event:
+                  actions.js(
+                      "performance.mark(arguments[0],{detail: arguments[1]});",
+                      arguments=['TextInput', text])
+
+              actions.wait(2)
+          else:
+              raise InputSourceNotImplementedError(self, action, action.input_source)
 
   def wait_for_element_impl(self,
                             actions: Actions,
